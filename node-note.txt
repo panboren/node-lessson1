@@ -1,0 +1,385 @@
+## node的安装
+- https://nodejs.org/en/
+
+## mac homebrew
+- brew install node
+
+> 安装后重新启动cmd命令行，NVM for mac,
+nvm-win
+
+## 配置环境变量的过程
+- add to path
+- 我的电脑 -> 属性-> 环境变量 -> path
+
+## 用node运行一个js文件
+- 控制台中运行文件
+```
+node 文件名
+```
+- 在编辑器中使用node
+
+
+## nodejs
+- 主线程是单线程(异步)callback，将后续的逻辑写成函数，传入到当前执行的函数中，当执行的函数得到了结果后，执行传入的函数(回调函数)
+- 五个人同时吃一碗饭(异步)
+- 阻塞不能异步（阻塞是针对内核说的）
+- i/o操作 读写操作，异步读写（能用异步绝不用同步）
+- event-driven 事件驱动（发布订阅）
+
+## web异步
+- setTimeout
+- callback
+- onclick
+- ajax
+
+=====================
+
+// 在文件中打印this不是global属性，node自带模块化功能 一个js文件就是一个模块，模块this不是global （闭包）
+
+// 每个文件都有局部作用域，不会将属性挂载在global上
+
+// 全局变量 可以不声明直接使用
+
+测试响应时间
+console.time('start');
+console.timeEnd('start');
+
+// process 进程 设置环境变量
+// 在命令行里配置NODE_ENV，mac export/windows set
+// 在webstorm中设置环境变量,
+// 如果代码放到服务器上，那就没有此环境变量，取不到可以走上线环境
+
+let url = '';
+if(process.env.NODE_ENV == 'dev'){
+    url = 'http://localhost:3000';
+}else{
+    url = 'http://www.zhufengpeixun.cn';
+}
+
+
+// 异步的，在当前队列的底部
+process.nextTick(function () {
+    console.log(this)
+});
+
+
+// 第二个队列中的
+setImmediate( ()=> {
+   console.log(this)
+});
+
+setTimeout((...args)=> { // this指向的是timeout自己,箭头函数中没有this指向没有arguments
+},100,'吃饭');
+
+setTimeout如果设置时间在12毫秒以上比setImmediate快
+
+
+// 形参（剩余运算符） 将剩余的内容放到一个数组中,args中['吃饭']
+// 拓展运算符 展开运算符 ...[ ] { ...{} }
+
+
+// exports require module __filename,__dirname
+// exports导出
+// require引用 导入
+// module 代表当前模块
+// __filename当前的文件的绝对路径
+// __dirname 当前的文件夹的目录的绝对路径
+// 模块化 低耦合 高内聚，方便维护，防止代码冲突（命名冲突）
+// （闭包） 单例(不能保证一定不冲突,导致调用过长)
+// CMD seajs 就近依赖 AMD 依赖前置 requirejs (浏览器端的模块化)
+
+// node基于规范commonjs 文件的读写，node天生自带模块化
+// 1.定义如何创建一个模块 一个js文件就是一个模块
+// 2.如果使用一个模块 require 你要使用一个文件只需要require一个文件
+// 3.如何导出一个模块 exports / module.exports
+
+// promise 用法，promise的实例就具备了then方法
+let read = util.promisify(fs.readFile); // 把一个函数promise化
+
+## 第三方模块
+- 通过npm来进行安装 node package manager
+### 全局安装 -g (只能在"命令行"中使用) 默认的安装路径是(npm root -g) 不会自动加入环境变量中 而是通过npm进行映射
+```
+npm install nrm -g 安装nrm
+nrm test 测试链接时间
+nrm ls 显示所有的可用源
+nrm use 源的名字 使用源
+npm uninstall nrm -g 卸载nrm
+```
+
+#### http-server
+- 帮我们启动一个本地服务
+```
+npm install -g http-server
+http-server -p 3000 在某个路径下启动服务
+```
+
+### idoc
+```
+npm install -g idoc
+```
+
+> npm,nrm,nvm
+
+### 本地安装
+- 没有-g参数，安装之前需要初始化,记录安装依赖的
+```
+npm init -y
+```
+
+> package.json，目录不能有中文，特殊字符，大写，默认先找当前目录下的package.json，如果当前木没有会去上级查找，找不到才认为在当前目录下安装
+
+> package.json中scripts可以配置一些快捷方式
+
+#### 项目依赖
+- 开发时使用，上线还需要
+```
+npm install jquery@1.8.3
+npm uninstall jquery
+```
+
+#### 开发依赖
+- 开发时使用，线上不使用
+```
+npm install less --save-dev
+npm uninstall less --save-dev
+```
+
+### 安装全部依赖
+```
+npm install
+```
+
+## yarn安装
+- npm install -g yarn (回家要安装)
+```
+yarn init
+yarn add 包
+yarn remove 包 删除包
+yarn add less --dev 安装开发依赖
+yarn install 安装依赖包
+```
+
+## 想发布包
+- 先回到国外 nrm use npm
+- 包名不能和已有的包一致
+- 入口文件，做整合用的
+- 注册账号,如果有账号表示登陆，新用户需要校验邮箱
+```
+npm addUser
+```
+- 发布
+```
+npm publish
+```
+
+##
+
+
+// 第三方模块不需要./的形式引入 可以直接通过包名将文件引入,找package.json中的main对应的文件运行,如果当前目录下没找会像上一级查找，找到计算机的根目录为止
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
